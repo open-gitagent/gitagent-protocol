@@ -1,0 +1,50 @@
+name: gnap-worker-flow
+description: Claim and process tasks from a shared GNAP coordination board
+
+triggers:
+  - schedule: "*/5 * * * *"   # poll board every 5 minutes
+
+steps:
+  claim:
+    tool: bash
+    inputs:
+      command: |
+        git clone $GNAP_BOARD_URL /tmp/board
+        cd /tmp/board
+        TASK=$(ls board/todo/ | head -1)
+        if [ -z "$TASK" ]; then echo "no_task"; exit 0; fi
+        git mv board/todo/$TASK board/doing/$TASK
+        sed -i "s/owner: null/owner: $AGENT_ID/" board/doing/$TASK
+        git commit -m "claim: $TASK by $AGENT_ID"
+        git push
+        echo $TASK
+
+  process:
+    agent: analyst
+    depends_on: [claim]
+    conditions:
+      - ${{ steps.claim.outputs.stdout != 'no_task' }}
+    inputs:
+      task_file: board/doing/${{ steps.claim.outputs.stdout }}
+
+  complete:
+    tool: bash
+    depends_on: [process]
+    inputs:
+      command: |
+        cd /tmp/board
+        TASK="${{ steps.claim.outputs.stdout }}"
+        git mv board/doing/$TASK board/done/$TASK
+        echo "\n\n## Output\n${{ steps.process.outputs }}" >> board/done/$TASK
+        git commit -m "done: $TASK"
+        git push
+
+error_handling:
+  on_failure:
+    tool: bash
+    inputs:
+      command: |
+        cd /tmp/board
+        git mv board/doing/$TASK board/todo/$TASK
+        git commit -m "requeue: $TASK (failed)"
+        git push

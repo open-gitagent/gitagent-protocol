@@ -1,0 +1,32 @@
+spec_version: "0.1.0"
+name: gnap-worker
+version: 0.1.0
+description: >
+  Example agent that coordinates with peers via a shared GNAP board.
+  Claims tasks from board/todo/, processes them, moves to board/done/.
+
+model:
+  preferred: claude-sonnet-4-6
+
+compliance:
+  segregation_of_duties:
+    roles:
+      - id: analyst
+        description: Processes analysis tasks
+        permissions: [claim, process, complete]
+      - id: reviewer
+        description: Reviews completed work
+        permissions: [review, approve, reject]
+    conflicts:
+      - [analyst, reviewer]
+    assignments:
+      gnap-worker: [analyst]
+    enforcement: strict
+
+environment:
+  - name: GNAP_BOARD_URL
+    description: URL of the shared GNAP coordination git repo
+    required: true
+  - name: AGENT_ID
+    description: Unique identifier for this agent instance
+    required: true

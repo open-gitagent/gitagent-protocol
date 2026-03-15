@@ -202,6 +202,41 @@ error_handling:
   channel: "#eng-reviews"
 ```
 
+
+### Multi-Agent Coordination via GNAP
+
+When multiple gitagent-defined agents need to work together on shared tasks, use [GNAP (Git-Native Agent Protocol)](https://github.com/farol-team/gnap) as the coordination layer. A shared git repo acts as a persistent, auditable task board — no orchestrator process required.
+
+```
+coordination-board/          # shared GNAP repo (separate from agent repos)
+├── board/
+│   ├── todo/
+│   │   └── analyze-report.md      # task waiting to be claimed
+│   ├── doing/
+│   │   └── write-summary.md       # claimed by agent-b (owner set in front-matter)
+│   └── done/
+│       └── fetch-data.md          # completed with output appended
+```
+
+Agents coordinate by committing file moves: `todo/ → doing/ → done/`. Every transition is a git commit — full audit trail, no extra infrastructure.
+
+**Task file format:**
+
+```markdown
+---
+id: analyze-report-001
+priority: high
+owner: null
+required_role: analyst
+---
+# Analyze Q1 Report
+...
+```
+
+**SOD integration:** combine `required_role` in task files with `conflicts` in `agent.yaml` to prevent the same agent from both creating and completing high-stakes tasks.
+
+See [`examples/gnap-coordination/`](examples/gnap-coordination/) for a full working example with a SkillsFlow workflow that polls the board, claims tasks, and writes results.
+
 ### Porting Framework Agents to GitAgent
 
 Agents built in frameworks like NVIDIA AIQ, LangGraph, or CrewAI have their identity split across config files, Jinja2 templates, and Python code. gitagent extracts the **identity layer** — prompts, rules, roles, tool schemas — into a portable, versionable format.
