@@ -1,6 +1,6 @@
 ---
 name: run-agent
-description: Help users run agents with different adapters — Claude, OpenAI, Lyzr, GitHub Models, and more
+description: "Configures and runs agents with different adapters including Claude, OpenAI, CrewAI, Lyzr, and GitHub Models. Supports local execution, remote git repos, and one-shot prompts. Use when the user wants to run an agent, switch LLM providers, configure adapter settings, or launch agents from git repositories."
 license: MIT
 metadata:
   author: gitagent
@@ -12,6 +12,14 @@ metadata:
 
 ## When to Use
 When a user wants to run an agent locally, from a git repo, or with a specific adapter/framework.
+
+## Troubleshooting
+
+If you see authentication errors:
+- **Claude**: Ensure Claude Code is authenticated (`claude auth status`)
+- **OpenAI**: Verify `OPENAI_API_KEY` is set and valid
+- **GitHub**: Check `GITHUB_TOKEN` has correct permissions
+- **Lyzr**: Confirm `LYZR_API_KEY` is active
 
 ## Basic Usage
 

@@ -1,6 +1,6 @@
 ---
 name: export-agent
-description: Help users export agents to other frameworks and import from existing tools
+description: "Converts agent definitions between frameworks — exports to Claude Code, OpenAI, CrewAI, Lyzr, and GitHub Models formats, and imports from Claude, Cursor, and CrewAI projects. Use when the user wants to convert an agent, migrate to another framework, export to LangChain/AutoGen/CrewAI, or import from existing automation tools."
 license: MIT
 metadata:
   author: gitagent
@@ -10,8 +10,14 @@ metadata:
 
 # Export & Import Agents
 
-## When to Use
-When a user wants to convert their agent to another framework format, or import an existing agent into gitagent.
+## Verify Export
+
+After exporting, check the output matches expectations:
+
+```bash
+# Verify export file was created and contains agent name
+gitagent export -f system-prompt -d ./my-agent | head -5
+```
 
 ## Export
 

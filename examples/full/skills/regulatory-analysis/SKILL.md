@@ -1,6 +1,6 @@
 ---
 name: regulatory-analysis
-description: Analyze documents and processes for regulatory compliance
+description: "Analyzes documents and processes against FINRA, SEC, Federal Reserve, and CFPB regulatory frameworks. Identifies compliance gaps, classifies findings by severity, and recommends remediation. Use when performing compliance audits, regulatory reviews, gap analyses, or verifying policy adherence to financial regulations."
 license: proprietary
 allowed-tools: search-regulations
 metadata:
@@ -22,6 +22,7 @@ When analyzing a document or process for regulatory compliance:
 4. **Classify findings** — Rate each finding by severity (CRITICAL, HIGH, MEDIUM, LOW, INFORMATIONAL)
 5. **Recommend remediation** — Provide specific, actionable steps to address each finding
 6. **Assess confidence** — Rate your confidence in each finding (HIGH, MEDIUM, LOW)
+7. **Validate citations** — Verify all cited rules exist and are current before finalizing
 
 ## Regulatory Priority Order
 When multiple frameworks apply, prioritize in this order:
@@ -65,4 +66,15 @@ When multiple frameworks apply, prioritize in this order:
 
 ### Disclaimer
 This analysis is for informational purposes only and does not constitute legal advice.
+```
+
+### Example Finding
+
+```
+#### CRITICAL
+- **Inadequate Suitability Disclosure** — FINRA Rule 2111
+  - Issue: Customer account agreement lacks suitability questionnaire for complex products
+  - Evidence: Section 4.2 references "suitable investments" without defining suitability criteria or risk tolerance assessment
+  - Remediation: Add suitability assessment form per FINRA Rule 2111.05 (Supplementary Material) before account opening
+  - Confidence: HIGH
 ```

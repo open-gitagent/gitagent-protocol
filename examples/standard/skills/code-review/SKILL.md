@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review code changes for quality, security, and best practices
+description: "Reviews code diffs and files for security vulnerabilities (OWASP Top 10), error handling, complexity, naming conventions, and performance issues. Use when the user asks to review a PR, pull request, diff, merge request, or code changes."
 license: MIT
 allowed-tools: lint-check complexity-analysis
 metadata:
@@ -39,4 +39,18 @@ When reviewing code:
 
 ## What's Done Well
 - [Positive observations]
+```
+
+### Example Finding
+
+```
+### CRITICAL
+- **Line 42**: SQL injection vulnerability — user input concatenated directly into query string.
+  Fix: Use parameterized queries instead of string concatenation.
+  ```python
+  # Before (vulnerable)
+  cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")
+  # After (safe)
+  cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+  ```
 ```

@@ -1,6 +1,6 @@
 ---
 name: document-review
-description: Review financial documents for completeness and compliance
+description: "Reviews financial documents (prospectuses, ADVs, marketing materials) for FINRA 2210 compliance, required disclosures, and balanced presentation. Use when reviewing financial statements, audit documents, regulatory filings, or when the user mentions compliance checks, financial audits, or document verification."
 license: proprietary
 allowed-tools: search-regulations generate-report
 metadata:
@@ -29,3 +29,23 @@ When reviewing a financial document:
 - [ ] Proper disclaimers included
 - [ ] Correct classification (correspondence/retail/institutional)
 - [ ] Principal pre-approval status verified (if retail communication)
+
+## Output Format
+
+For each finding, produce:
+
+```
+### [SEVERITY] — [Rule Reference]
+- **Issue**: [What was found]
+- **Location**: [Section/page reference]
+- **Recommended action**: [Specific fix]
+```
+
+### Example Finding
+
+```
+### WARNING — FINRA 2210(d)(1)(A)
+- **Issue**: Performance claim "consistently outperforms the market" lacks supporting data and time period
+- **Location**: Page 2, paragraph 3
+- **Recommended action**: Add specific time period, benchmark comparison, and standardized performance data per SEC Rule 482
+```

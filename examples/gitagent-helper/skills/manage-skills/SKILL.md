@@ -1,6 +1,6 @@
 ---
 name: manage-skills
-description: Help users search, install, create, and manage agent skills
+description: "Searches the SkillsMP registry, installs skills locally or globally, creates custom skills with SKILL.md frontmatter, and manages the skill lifecycle. Use when the user wants to find skills, add new capabilities, install a skill, browse available skills, create a custom skill, or manage the skills system."
 license: MIT
 metadata:
   author: gitagent
@@ -12,6 +12,14 @@ metadata:
 
 ## When to Use
 When a user wants to find skills, install them, create new ones, or understand the skills system.
+
+## Verify Installation
+
+After installing a skill, confirm it's available:
+
+```bash
+gitagent skills list -d ./my-agent | grep "code-review"
+```
 
 ## Search Skills
 

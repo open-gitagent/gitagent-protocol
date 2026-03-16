@@ -1,6 +1,6 @@
 ---
 name: get-started
-description: Help users install gitagent and create their first agent from scratch
+description: "Guides installation of gitagent and creation of first agent with scaffolding, configuration, and validation. Use when the user is new to gitagent, asks how to get started, wants to install gitagent, set up their first agent, or says 'how do I start?'"
 license: MIT
 metadata:
   author: gitagent

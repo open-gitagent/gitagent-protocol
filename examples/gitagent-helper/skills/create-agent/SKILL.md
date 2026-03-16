@@ -1,6 +1,6 @@
 ---
 name: create-agent
-description: Guide users through agent.yaml configuration, SOUL.md writing, and directory structure
+description: "Creates and configures agent.yaml files, writes SOUL.md personality definitions, and sets up agent directory structures with skills, tools, and knowledge. Use when the user wants to configure an agent, create agent.yaml, write SOUL.md, set up agent directory structure, or customize agent settings."
 license: MIT
 metadata:
   author: gitagent
@@ -10,8 +10,13 @@ metadata:
 
 # Create & Configure Agents
 
-## When to Use
-When a user wants to customize their agent.yaml, write a good SOUL.md, add skills/tools/knowledge, or set up compliance.
+## Quick Start
+
+1. Create directory structure: `mkdir -p my-agent/skills`
+2. Write `agent.yaml` with required fields (see below)
+3. Create `SOUL.md` with agent identity
+4. Add skills, tools, and knowledge as needed
+5. Validate: `gitagent validate -d ./my-agent`
 
 ## agent.yaml Reference
 
