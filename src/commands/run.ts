@@ -12,6 +12,8 @@ import { runWithNanobot } from '../runners/nanobot.js';
 import { runWithLyzr } from '../runners/lyzr.js';
 import { runWithGitHub } from '../runners/github.js';
 import { runWithGit } from '../runners/git.js';
+import { runWithLangChain } from '../runners/langchain.js';
+import { runWithLangGraph } from '../runners/langgraph.js';
 
 interface RunOptions {
   repo?: string;
@@ -26,7 +28,7 @@ interface RunOptions {
 export const runCommand = new Command('run')
   .description('Run an agent from a git repository or local directory')
   .option('-r, --repo <url>', 'Git repository URL')
-  .option('-a, --adapter <name>', 'Adapter: claude, openai, crewai, openclaw, nanobot, lyzr, github, git, prompt', 'claude')
+  .option('-a, --adapter <name>', 'Adapter: claude, openai, crewai, openclaw, nanobot, lyzr, github, git, prompt, langchain, langgraph', 'claude')
   .option('-b, --branch <branch>', 'Git branch/tag to clone', 'main')
   .option('--refresh', 'Force re-clone (pull latest)', false)
   .option('--no-cache', 'Clone to temp dir, delete on exit')
@@ -36,7 +38,6 @@ export const runCommand = new Command('run')
     let agentDir: string;
     let cleanup: (() => void) | undefined;
 
-    // Resolve agent directory
     if (options.dir) {
       agentDir = resolve(options.dir);
     } else if (options.repo) {
@@ -61,14 +62,12 @@ export const runCommand = new Command('run')
       process.exit(1);
     }
 
-    // Validate agent directory
     if (!agentDirExists(agentDir)) {
       error(`No agent.yaml found in ${agentDir}`);
       if (cleanup) cleanup();
       process.exit(1);
     }
 
-    // Load manifest
     let manifest;
     try {
       manifest = loadAgentManifest(agentDir);
@@ -78,7 +77,6 @@ export const runCommand = new Command('run')
       process.exit(1);
     }
 
-    // Print agent info
     heading(`Running agent: ${manifest.name}`);
     label('Version', manifest.version);
     label('Description', manifest.description);
@@ -88,7 +86,6 @@ export const runCommand = new Command('run')
     label('Adapter', options.adapter);
     divider();
 
-    // Run with selected adapter
     try {
       switch (options.adapter) {
         case 'claude':
@@ -125,12 +122,18 @@ export const runCommand = new Command('run')
             prompt: options.prompt,
           });
           break;
+        case 'langchain':
+          runWithLangChain(agentDir, manifest, { prompt: options.prompt });
+          break;
+        case 'langgraph':
+          runWithLangGraph(agentDir, manifest, { prompt: options.prompt });
+          break;
         case 'prompt':
           console.log(exportToSystemPrompt(agentDir));
           break;
         default:
           error(`Unknown adapter: ${options.adapter}`);
-          info('Supported adapters: claude, openai, crewai, openclaw, nanobot, lyzr, github, git, prompt');
+          info('Supported adapters: claude, openai, crewai, openclaw, nanobot, lyzr, github, git, prompt, langchain, langgraph');
           process.exit(1);
       }
     } catch (e) {
