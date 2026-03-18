@@ -357,6 +357,7 @@ Adapters are used by both `export` and `run`. Available adapters:
 | `github` | GitHub Actions agent |
 | `git` | Git-native execution (run only) |
 | `openclaw` | OpenClaw format |
+| `opencode` | OpenCode instructions + config |
 | `nanobot` | Nanobot format |
 
 ```bash
