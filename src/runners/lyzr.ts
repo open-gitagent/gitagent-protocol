@@ -22,7 +22,7 @@ export async function createLyzrAgent(agentDir: string, options: LyzrRunOptions 
   const apiKey = ensureLyzrAuth(options.apiKey);
   const payload = exportToLyzr(agentDir);
 
-  info(`Creating Lyzr agent "${payload.name}"...`);
+  info('Creating Lyzr agent "' + String(payload.name) + '"...');
   label('Provider', payload.provider_id);
   label('Model', payload.model);
 
@@ -37,7 +37,7 @@ export async function createLyzrAgent(agentDir: string, options: LyzrRunOptions 
 
   if (!resp.ok) {
     const body = await resp.text();
-    error(`Failed to create agent (${resp.status}): ${body}`);
+    error('Failed to create agent (' + String(resp.status) + '): ' + body);
     process.exit(1);
   }
 
@@ -49,7 +49,7 @@ export async function createLyzrAgent(agentDir: string, options: LyzrRunOptions 
     process.exit(1);
   }
 
-  success(`Agent created: ${data.agent_id}`);
+  success('Agent created: ' + String(data.agent_id));
   return data.agent_id;
 }
 
@@ -61,13 +61,15 @@ export async function updateLyzrAgent(agentDir: string, agentId: string, options
   const apiKey = ensureLyzrAuth(options.apiKey);
 
   // Fetch existing agent to merge
-  info(`Fetching existing agent ${agentId}...`);
-  const getResp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/${agentId}`, {
+  const safeAgentId = encodeURIComponent(agentId);
+  info('Fetching existing agent ' + agentId + '...');
+  const getResp = await fetch(LYZR_AGENT_BASE_URL + '/v3/agents/' + safeAgentId, {
     headers: { 'x-api-key': apiKey },
   });
 
   if (!getResp.ok) {
-    error(`Failed to fetch agent (${getResp.status}): ${await getResp.text()}`);
+    const fetchErrBody = await getResp.text();
+    error('Failed to fetch agent (' + String(getResp.status) + '): ' + fetchErrBody);
     process.exit(1);
   }
 
@@ -77,9 +79,9 @@ export async function updateLyzrAgent(agentDir: string, agentId: string, options
   // Merge: new payload overrides existing
   const merged = { ...existing, ...payload };
 
-  info(`Updating agent "${payload.name}" (${agentId})...`);
+  info('Updating agent "' + String(payload.name) + '" (' + agentId + ')...');
 
-  const resp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/agents/template/single-task/${agentId}`, {
+  const resp = await fetch(LYZR_AGENT_BASE_URL + '/v3/agents/template/single-task/' + safeAgentId, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -89,12 +91,12 @@ export async function updateLyzrAgent(agentDir: string, agentId: string, options
   });
 
   if (!resp.ok) {
-    const body = await resp.text();
-    error(`Failed to update agent (${resp.status}): ${body}`);
+    const updateErrBody = await resp.text();
+    error('Failed to update agent (' + String(resp.status) + '): ' + updateErrBody);
     process.exit(1);
   }
 
-  success(`Agent updated: ${agentId}`);
+  success('Agent updated: ' + agentId);
 }
 
 /**
@@ -120,7 +122,7 @@ export async function runWithLyzr(agentDir: string, manifest: AgentManifest, opt
 
   if (existsSync(agentIdFile)) {
     agentId = readFileSync(agentIdFile, 'utf-8').trim();
-    info(`Using existing Lyzr agent: ${agentId}`);
+    info('Using existing Lyzr agent: ' + agentId);
   } else {
     info('No .lyzr_agent_id found — creating agent on Lyzr...');
     agentId = await createLyzrAgent(agentDir, options);
@@ -132,9 +134,9 @@ export async function runWithLyzr(agentDir: string, manifest: AgentManifest, opt
 
   // Build chat request
   const userId = options.userId || apiKey;
-  const sessionId = `${agentId}-${randomBytes(4).toString('hex')}`;
+  const sessionId = encodeURIComponent(agentId) + '-' + randomBytes(4).toString('hex');
 
-  info(`Launching Lyzr agent "${manifest.name}"...`);
+  info('Launching Lyzr agent "' + String(manifest.name) + '"...');
 
   const resp = await fetch(`${LYZR_AGENT_BASE_URL}/v3/inference/chat/`, {
     method: 'POST',
@@ -152,7 +154,7 @@ export async function runWithLyzr(agentDir: string, manifest: AgentManifest, opt
 
   if (!resp.ok) {
     const body = await resp.text();
-    error(`Chat failed (${resp.status}): ${body}`);
+    error('Chat failed (' + String(resp.status) + '): ' + body);
     info('Make sure your LYZR_API_KEY is valid and the agent exists on Lyzr Studio');
     process.exit(1);
   }
