@@ -521,8 +521,7 @@ function parseSections(markdown: string): [string, string][] {
 
 export const importCommand = new Command('import')
   .description('Import from other agent formats')
-.requiredOption('--from <format>', 'Source format (claude, cursor, crewai, opencode, gemini)')
-.requiredOption('--from <format>', 'Source format (claude, cursor, crewai, opencode, codex)')
+.requiredOption('--from <format>', 'Source format (claude, cursor, crewai, opencode, gemini, codex)')
   .argument('<path>', 'Source file or directory path')
   .option('-d, --dir <dir>', 'Target directory', '.')
   .action((sourcePath: string, options: ImportOptions) => {
@@ -549,12 +548,12 @@ export const importCommand = new Command('import')
 case 'gemini':
           importFromGemini(sourcePath, targetDir);
           break;
+        case 'codex':
+          importFromCodex(sourcePath, targetDir);
+          break;
         default:
           error(`Unknown format: ${options.from}`);
-          info('Supported formats: claude, cursor, crewai, opencode, gemini');
-case 'codex':
-          importFromCodex(sourcePath, targetDir);
-          info('Supported formats: claude, cursor, crewai, opencode, codex');
+          info('Supported formats: claude, cursor, crewai, opencode, gemini, codex');
           process.exit(1);
       }
 
