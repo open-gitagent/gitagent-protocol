@@ -1,12 +1,75 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, cpSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkillMetadata } from '../utils/skill-loader.js';
 
+/**
+ * Merge parent agent content into the current agent directory.
+ * Resolution rules per spec Section 15:
+ *   - SOUL.md: child replaces parent entirely
+ *   - RULES.md: child rules append to parent rules (union)
+ *   - skills/, tools/: union with child shadowing parent on name collision
+ *   - memory/: isolated per agent (not inherited)
+ */
+function mergeParentContent(agentDir: string, parentDir: string): {
+  mergedSoul: string | null;
+  mergedRules: string | null;
+} {
+  const childSoul = loadFileIfExists(join(agentDir, 'SOUL.md'));
+  const parentSoul = loadFileIfExists(join(parentDir, 'SOUL.md'));
+
+  const childRules = loadFileIfExists(join(agentDir, 'RULES.md'));
+  const parentRules = loadFileIfExists(join(parentDir, 'RULES.md'));
+
+  // SOUL.md: child replaces parent entirely; fall back to parent if child has none
+  const mergedSoul = childSoul ?? parentSoul;
+
+  // RULES.md: union — parent first, then child appended
+  let mergedRules: string | null = null;
+  if (parentRules && childRules) {
+    mergedRules = parentRules + '\n\n' + childRules;
+  } else {
+    mergedRules = childRules ?? parentRules;
+  }
+
+  // skills/: copy parent skills that don't exist in child
+  const parentSkillsDir = join(parentDir, 'skills');
+  const childSkillsDir = join(agentDir, 'skills');
+  if (existsSync(parentSkillsDir)) {
+    mkdirSync(childSkillsDir, { recursive: true });
+    const parentSkills = readdirSync(parentSkillsDir, { withFileTypes: true });
+    for (const entry of parentSkills) {
+      if (!entry.isDirectory()) continue;
+      const childSkillPath = join(childSkillsDir, entry.name);
+      if (!existsSync(childSkillPath)) {
+        cpSync(join(parentSkillsDir, entry.name), childSkillPath, { recursive: true });
+      }
+    }
+  }
+
+  return { mergedSoul, mergedRules };
+}
+
 export function exportToClaudeCode(dir: string): string {
   const agentDir = resolve(dir);
   const manifest = loadAgentManifest(agentDir);
+
+  // Check for installed parent agent (extends)
+  const parentDir = join(agentDir, '.gitagent', 'parent');
+  const hasParent = existsSync(parentDir) && existsSync(join(parentDir, 'agent.yaml'));
+
+  let soul: string | null;
+  let rules: string | null;
+
+  if (hasParent) {
+    const merged = mergeParentContent(agentDir, parentDir);
+    soul = merged.mergedSoul;
+    rules = merged.mergedRules;
+  } else {
+    soul = loadFileIfExists(join(agentDir, 'SOUL.md'));
+    rules = loadFileIfExists(join(agentDir, 'RULES.md'));
+  }
 
   // Build CLAUDE.md content
   const parts: string[] = [];
@@ -15,13 +78,11 @@ export function exportToClaudeCode(dir: string): string {
   parts.push(`${manifest.description}\n`);
 
   // SOUL.md → identity section
-  const soul = loadFileIfExists(join(agentDir, 'SOUL.md'));
   if (soul) {
     parts.push(soul);
   }
 
   // RULES.md → constraints section
-  const rules = loadFileIfExists(join(agentDir, 'RULES.md'));
   if (rules) {
     parts.push(rules);
   }
