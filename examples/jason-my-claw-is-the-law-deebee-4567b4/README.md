@@ -1,4 +1,6 @@
-# Jason — OpenClaw Agent (ClawLaw Edition)
+# Jason — My Claw IS the Law — DeeBee #4567b4
+
+![DeeBee #4567b4](https://img.shields.io/badge/DeeBee-%234567b4-4567b4)
 
 An autonomous CEO-mode AI agent built on [OpenClaw](https://openclaw.dev), running under the **ClawLaw** operating system.
 
@@ -35,7 +37,7 @@ Fallbacks activate on 429 or timeout — never because a task "seems complex."
 ## gitagent Structure
 
 ```
-jason-openclaw/
+jason-my-claw-is-the-law-deebee-4567b4/
 ├── agent.yaml                          # Manifest with ClawLaw config
 ├── SOUL.md                             # Voice, decision rules, budget limits
 ├── RULES.md                            # ClawLaw hard rules
@@ -56,7 +58,7 @@ jason-openclaw/
 npm install -g @shreyaskapale/gitagent
 
 # Clone this agent
-gitagent clone open-gitagent/gitagent examples/jason-openclaw my-jason
+gitagent clone open-gitagent/gitagent examples/jason-my-claw-is-the-law-deebee-4567b4 my-jason
 
 # Review the rules before running
 cat my-jason/RULES.md
