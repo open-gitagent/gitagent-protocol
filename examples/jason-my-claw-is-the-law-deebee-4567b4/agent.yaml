@@ -13,8 +13,8 @@ license: MIT
 model:
   preferred: ollama/qwen3-coder:latest
   fallback:
-    - groq/llama-3.3-70b-versatile
-    - groq/moonshotai/kimi-k2-instruct
+    - cerebras/qwen-3-235b-a22b-instruct-2507
+    - cerebras/llama3.1-8b
     - openrouter/z-ai/glm-4.5-air
     - openrouter/qwen/qwen3-coder
     - openrouter/nousresearch/hermes-3-llama-3.1-405b:free

@@ -16,9 +16,9 @@ Tier 0 — Local (never dies, zero cost)
   ollama/qwen3-coder:latest    primary, MoE, 128 TPS, 64k ctx
   ollama/gpt-oss:20b           fallback, 32k ctx HARD LIMIT
 
-Tier 1 — Fast Free Cloud (< 500ms TTFT)
-  groq/llama-3.3-70b-versatile
-  groq/moonshotai/kimi-k2-instruct
+Tier 1 — Fast Free Cloud (up to 2100 TPS)
+  cerebras/qwen-3-235b-a22b-instruct-2507   235B MoE, fast free
+  cerebras/llama3.1-8b                      8B, ultra-fast light tasks
 
 Tier 2 — Free Cloud (normal latency)
   openrouter/z-ai/glm-4.5-air
@@ -53,8 +53,8 @@ curl -s localhost:11434/api/tags | python3 -c "import json,sys; d=json.load(sys.
 
 # Tier 1
 curl -s -o /dev/null -w "%{http_code}" \
-  -H "Authorization: Bearer $GROQ_API_KEY" \
-  https://api.groq.com/openai/v1/models
+  -H "Authorization: Bearer $CEREBRAS_API_KEY" \
+  https://api.cerebras.ai/v1/models
 
 # Tier 4
 curl -s -o /dev/null -w "%{http_code}" \
