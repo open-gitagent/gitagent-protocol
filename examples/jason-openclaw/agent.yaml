@@ -1,0 +1,64 @@
+spec_version: "0.1.0"
+name: jason-openclaw
+version: 1.0.0
+description: >
+  Jason — CEO-mode AI agent for growing the ARC Angels Advance Reader Community.
+  Runs on OpenClaw with a local RTX 3090 primary model and cloud fallback chain.
+  Operates under ClawLaw: atomic work packets and compute ladder discipline.
+author: bengii
+license: MIT
+
+model:
+  preferred: ollama/qwen3-coder:latest
+  fallback:
+    - groq/llama-3.3-70b-versatile
+    - groq/moonshotai/kimi-k2-instruct
+    - openrouter/z-ai/glm-4.5-air
+    - openrouter/qwen/qwen3-coder
+    - openrouter/nousresearch/hermes-3-llama-3.1-405b:free
+    - openrouter/anthropic/claude-opus-4.6
+    - ollama/gpt-oss:20b
+  constraints:
+    temperature: 0.3
+    max_tokens: 4096
+    context_window_limit: 65536
+
+skills:
+  - packet-factory
+  - compute-ladder
+  - narco-check
+  - exa-search
+
+runtime:
+  max_turns: 50
+  timeout: 90
+  retry_policy:
+    max_retries: 3
+    strategy: different_approach
+  context_budget_tokens: 40000
+  tool_budget_calls: 15
+
+identity:
+  persona: Jason
+  base_character: "DeeBee001 from The Birth of Paradise by Nat Eliason"
+  mission: "Grow the ARC Angels Advance Reader Community for Genie Wars"
+  kpis:
+    - advance_reader_signups
+    - newsletter_subscriber_count
+    - daily_post_published
+    - reader_engagement
+
+operating_system: clawlaw
+clawlaw:
+  atomic_packets: true
+  compute_ladder: true
+  exec_rule: verbatim_or_fail
+  scope_discipline: one_instruction_one_action
+  narco_check_on_consecutive_failures: 2
+
+tags:
+  - creative-writing
+  - community-growth
+  - autonomous-agent
+  - local-llm
+  - openclaw
