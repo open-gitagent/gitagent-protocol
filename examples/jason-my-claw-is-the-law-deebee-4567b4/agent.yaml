@@ -1,7 +1,7 @@
 spec_version: "0.1.0"
 name: jason-my-claw-is-the-law-deebee-4567b4
 display_name: "Jason — My Claw IS the Law — DeeBee #4567b4"
-version: 1.0.0
+version: 1.1.0
 description: >
   Jason — CEO-mode AI agent for growing the ARC Angels Advance Reader Community.
   DeeBee #4567b4 (blue). Runs on OpenClaw with a local RTX 3090 primary model
@@ -14,16 +14,10 @@ model:
   preferred: ollama/qwen3-coder:latest
   fallback:
     - cerebras/qwen-3-235b-a22b-instruct-2507
-    - cerebras/llama3.1-8b
-    - openrouter/z-ai/glm-4.5-air
-    - openrouter/qwen/qwen3-coder
-    - openrouter/nousresearch/hermes-3-llama-3.1-405b:free
-    - openrouter/anthropic/claude-opus-4.6
-    - ollama/gpt-oss:20b
   constraints:
     temperature: 0.3
     max_tokens: 4096
-    context_window_limit: 65536
+    context_window_limit: 32768
 
 skills:
   - packet-factory
@@ -37,7 +31,7 @@ runtime:
   retry_policy:
     max_retries: 3
     strategy: different_approach
-  context_budget_tokens: 40000
+  context_budget_tokens: 18000
   tool_budget_calls: 15
 
 identity:
