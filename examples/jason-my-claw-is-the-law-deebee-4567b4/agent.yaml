@@ -17,7 +17,7 @@ model:
   constraints:
     temperature: 0.3
     max_tokens: 4096
-    context_window_limit: 32768
+    context_window_limit: 65536
 
 skills:
   - packet-factory
@@ -31,7 +31,7 @@ runtime:
   retry_policy:
     max_retries: 3
     strategy: different_approach
-  context_budget_tokens: 18000
+  context_budget_tokens: 36000
   tool_budget_calls: 15
 
 identity:
