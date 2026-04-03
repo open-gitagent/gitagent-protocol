@@ -228,6 +228,13 @@
       "items": { "type": "string" },
       "uniqueItems": true
     },
+    "mcp_servers": {
+      "type": "object",
+      "description": "MCP server definitions. Keys are server names. Each server is either stdio-based (command) or HTTP-based (url).",
+      "additionalProperties": {
+        "$ref": "#/$defs/mcp_server_config"
+      }
+    },
     "metadata": {
       "type": "object",
       "description": "Arbitrary key-value metadata. Values must be strings, numbers, or booleans.",
@@ -243,6 +250,42 @@
   "additionalProperties": false,
 
   "$defs": {
+    "mcp_server_config": {
+      "type": "object",
+      "description": "Configuration for a single MCP server (stdio or HTTP)",
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Executable command for stdio-based servers"
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Arguments for the command"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Environment variables. Use ${VAR} for interpolation."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for HTTP-based (SSE/streamable HTTP) MCP servers"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "HTTP headers for URL-based servers"
+        }
+      },
+      "oneOf": [
+        { "required": ["command"] },
+        { "required": ["url"] }
+      ],
+      "additionalProperties": false
+    },
+
     "dependency": {
       "type": "object",
       "required": ["name", "source"],

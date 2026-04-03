@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkillMetadata } from '../utils/skill-loader.js';
+import { buildMcpServersConfig } from './shared.js';
 
 /**
  * Merge parent agent content into the current agent directory.
@@ -51,10 +52,53 @@ function mergeParentContent(agentDir: string, parentDir: string): {
   return { mergedSoul, mergedRules };
 }
 
-export function exportToClaudeCode(dir: string): string {
+/**
+ * Export a gitagent to Claude Code format.
+ *
+ * Claude Code uses:
+ *   - CLAUDE.md      (custom agent instructions, project root)
+ *   - .mcp.json      (MCP server configuration)
+ */
+export interface ClaudeCodeExport {
+  /** Content for CLAUDE.md */
+  instructions: string;
+  /** Content for .mcp.json (null if no MCP servers defined) */
+  mcpConfig: Record<string, unknown> | null;
+}
+
+export function exportToClaudeCode(dir: string): ClaudeCodeExport {
   const agentDir = resolve(dir);
   const manifest = loadAgentManifest(agentDir);
 
+  const instructions = buildInstructions(agentDir, manifest);
+  const mcpServers = buildMcpServersConfig(manifest.mcp_servers);
+  const mcpConfig = mcpServers ? { mcpServers } : null;
+
+  return { instructions, mcpConfig };
+}
+
+/**
+ * Export as a single string (for `gitagent export -f claude-code`).
+ */
+export function exportToClaudeCodeString(dir: string): string {
+  const exp = exportToClaudeCode(dir);
+  const parts: string[] = [];
+
+  parts.push('# === CLAUDE.md ===');
+  parts.push(exp.instructions);
+
+  if (exp.mcpConfig) {
+    parts.push('\n# === .mcp.json ===');
+    parts.push(JSON.stringify(exp.mcpConfig, null, 2));
+  }
+
+  return parts.join('\n');
+}
+
+function buildInstructions(
+  agentDir: string,
+  manifest: ReturnType<typeof loadAgentManifest>,
+): string {
   // Check for installed parent agent (extends)
   const parentDir = join(agentDir, '.gitagent', 'parent');
   const hasParent = existsSync(parentDir) && existsSync(join(parentDir, 'agent.yaml'));

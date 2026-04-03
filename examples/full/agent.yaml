@@ -132,6 +132,18 @@ compliance:
         required_roles: [analyst, reviewer]
         approval_required: true
     enforcement: strict
+mcp_servers:
+  regulatory-db:
+    command: npx
+    args:
+      - "-y"
+      - "@compliance/mcp-regulatory-search"
+    env:
+      REG_DB_URL: "${REG_DB_URL}"
+  compliance-api:
+    url: "https://compliance-api.internal/mcp"
+    headers:
+      Authorization: "Bearer ${COMPLIANCE_API_TOKEN}"
 tags:
   - compliance
   - financial-services

@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
+import { buildMcpServersMarkdown } from './shared.js';
 
 /**
  * Export a gitagent to OpenClaw workspace format.
@@ -227,6 +228,12 @@ function buildAgentsMd(agentDir: string, manifest: ReturnType<typeof loadAgentMa
         }
       }
     }
+  }
+
+  // MCP servers
+  const mcpSection = buildMcpServersMarkdown(manifest.mcp_servers);
+  if (mcpSection) {
+    parts.push(`\n${mcpSection}`);
   }
 
   // Compliance constraints

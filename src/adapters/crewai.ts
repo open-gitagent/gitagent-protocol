@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills } from '../utils/skill-loader.js';
+import { buildMcpServersMarkdown } from './shared.js';
 
 export function exportToCrewAI(dir: string): string {
   const agentDir = resolve(dir);
@@ -30,6 +31,12 @@ export function exportToCrewAI(dir: string): string {
       .map(s => `- ${s.frontmatter.name}: ${s.frontmatter.description}`)
       .join('\n');
     backstory += `\n\nCapabilities (Skills):\n${skillDescriptions}`;
+  }
+
+  // MCP servers
+  const mcpSection = buildMcpServersMarkdown(manifest.mcp_servers);
+  if (mcpSection) {
+    backstory += `\n\n${mcpSection}`;
   }
 
   // Build CrewAI YAML config

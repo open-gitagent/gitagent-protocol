@@ -1,4 +1,4 @@
-import { loadAgentManifest } from '../utils/loader.js';
+import { loadAgentManifest, type AgentManifest } from '../utils/loader.js';
 
 /**
  * Build a markdown compliance constraints section from a gitagent manifest.
@@ -65,4 +65,61 @@ export function buildComplianceSection(compliance: NonNullable<ReturnType<typeof
 
   if (constraints.length === 0) return '';
   return `## Compliance Constraints\n\n${constraints.join('\n')}`;
+}
+
+/**
+ * Convert agent.yaml mcp_servers to the standard mcpServers JSON format
+ * used by Claude Code, Cursor, Gemini, Codex, and OpenCode.
+ */
+export function buildMcpServersConfig(
+  mcpServers?: AgentManifest['mcp_servers'],
+): Record<string, unknown> | null {
+  if (!mcpServers || Object.keys(mcpServers).length === 0) return null;
+
+  const result: Record<string, unknown> = {};
+  for (const [name, config] of Object.entries(mcpServers)) {
+    const entry: Record<string, unknown> = {};
+    if (config.command) {
+      entry.command = config.command;
+      if (config.args) entry.args = config.args;
+    }
+    if (config.url) {
+      entry.url = config.url;
+      if (config.headers) entry.headers = config.headers;
+    }
+    if (config.env) entry.env = config.env;
+    result[name] = entry;
+  }
+  return result;
+}
+
+/**
+ * Build a markdown documentation section for MCP servers.
+ * Used by adapters without native MCP config support.
+ */
+export function buildMcpServersMarkdown(
+  mcpServers?: AgentManifest['mcp_servers'],
+): string {
+  if (!mcpServers || Object.keys(mcpServers).length === 0) return '';
+
+  const parts: string[] = ['## MCP Servers\n'];
+  for (const [name, config] of Object.entries(mcpServers)) {
+    parts.push(`### ${name}`);
+    if (config.command) {
+      const cmd = config.args
+        ? `${config.command} ${config.args.join(' ')}`
+        : config.command;
+      parts.push(`- Type: stdio`);
+      parts.push(`- Command: \`${cmd}\``);
+    }
+    if (config.url) {
+      parts.push(`- Type: HTTP`);
+      parts.push(`- URL: ${config.url}`);
+    }
+    if (config.env && Object.keys(config.env).length > 0) {
+      parts.push(`- Environment: ${Object.keys(config.env).join(', ')}`);
+    }
+    parts.push('');
+  }
+  return parts.join('\n');
 }
