@@ -15,4 +15,4 @@ Closes #
 - [ ] My code follows the existing style of this project
 - [ ] I have added/updated tests (if applicable)
 - [ ] I have updated documentation (if applicable)
-- [ ] I have read the [CONTRIBUTING.md](../CONTRIBUTING.md)
+- [ ] I have read the [CONTRIBUTING.md](https://github.com/open-gitagent/gitagent/blob/main/CONTRIBUTING.md)
