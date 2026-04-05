@@ -48,7 +48,7 @@ A framework-agnostic, git-native standard for defining AI agents.
 ## Installation
 
 ```bash
-npm install -g gitagent
+npm install -g @open-gitagent/gitagent
 ```
 
 Verify:
