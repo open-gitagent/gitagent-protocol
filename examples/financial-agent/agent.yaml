@@ -1,0 +1,88 @@
+spec_version: "0.1.0"
+name: purchasing-agent
+version: 1.0.0
+description: >
+  An autonomous purchasing agent that sources and buys software
+  tools and API services on behalf of an engineering team.
+  Operates within strict financial governance controls.
+
+model:
+  preferred: claude-sonnet-4-6
+  fallback: gpt-4o
+
+compliance:
+  risk_tier: high
+  frameworks: [internal-spend-policy]
+  supervision:
+    human_in_the_loop: on_flagged
+    kill_switch: true
+  recordkeeping:
+    audit_logging: true
+    retention_period: 7y
+    immutable: true
+
+segregation_of_duties:
+  roles:
+    - id: purchasing-agent
+      permissions: [request_payment]
+    - id: finance-reviewer
+      permissions: [approve, deny, audit]
+  conflicts:
+    - [purchasing-agent, finance-reviewer]
+  assignments:
+    purchasing-agent: [purchasing-agent]
+
+financial_governance:
+  enabled: true
+  firewall: valkurai
+  firewall_endpoint: https://api.valkurai.com/v1
+  agent_key_env: VALKURAI_AGENT_KEY
+
+  spending:
+    max_per_transaction_cents: 5000
+    max_monthly_cents: 50000
+    currency_default: AUD
+    allowed_categories:
+      - software
+      - api
+      - saas
+      - cloud
+      - infrastructure
+    blocked_categories:
+      - gambling
+      - crypto
+      - unknown
+
+  approval:
+    require_above_cents: 2000
+    approval_channel: slack
+    approval_timeout_minutes: 60
+    auto_deny_on_timeout: true
+
+  notifications:
+    on_flagged:
+      - slack
+      - email
+      - sms
+    on_blocked:
+      - slack
+      - email
+    on_safe: []
+
+  audit:
+    immutable: true
+    retention_period: 7y
+
+tools:
+  - name: valkurai_pay
+    description: >
+      Submit a payment request through the Valkurai financial
+      firewall. Evaluates identity, policy, and intent before
+      any transaction reaches Stripe.
+    source: https://github.com/valkurai/sdk-python
+
+skills:
+  - source: ./skills/vendor-research.md
+  - source: ./skills/price-comparison.md
+  - source: ./skills/purchase-justification.md
+```
