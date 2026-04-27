@@ -9,6 +9,7 @@ import { error, info } from '../utils/format.js';
 
 export interface OpenCodeRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 /**
@@ -24,6 +25,10 @@ export interface OpenCodeRunOptions {
  * Supports both interactive mode (no prompt) and single-shot mode (`opencode run "<message>"`).
  */
 export function runWithOpenCode(agentDir: string, manifest: AgentManifest, options: OpenCodeRunOptions = {}): void {
+  if (options.workspace) {
+    info('--workspace is not applied to OpenCode because it reads AGENTS.md and opencode.json from the prepared temporary workspace.');
+  }
+
   const exp = exportToOpenCode(agentDir);
 
   // Create a temporary workspace

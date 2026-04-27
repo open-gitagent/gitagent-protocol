@@ -9,6 +9,7 @@ import { error, info } from '../utils/format.js';
 
 export interface GitclawRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 /**
@@ -23,6 +24,10 @@ export interface GitclawRunOptions {
  * Supports both interactive mode (no prompt) and single-shot mode (`gitclaw run -p`).
  */
 export function runWithGitclaw(agentDir: string, manifest: AgentManifest, options: GitclawRunOptions = {}): void {
+  if (options.workspace) {
+    info('--workspace is not applied to gitclaw because it reads agent.yaml and related files from the prepared temporary workspace.');
+  }
+
   const exp = exportToGitclaw(agentDir);
 
   // Create a temporary workspace

@@ -12,6 +12,7 @@ export interface LyzrRunOptions {
   prompt?: string;
   apiKey?: string;
   userId?: string;
+  workspace?: string;
 }
 
 /**

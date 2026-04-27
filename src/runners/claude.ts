@@ -1,5 +1,5 @@
 import { writeFileSync, unlinkSync, existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -11,6 +11,7 @@ import { error, info, warn } from '../utils/format.js';
 
 export interface ClaudeRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 export function runWithClaude(agentDir: string, manifest: AgentManifest, options: ClaudeRunOptions = {}): void {
@@ -80,7 +81,10 @@ export function runWithClaude(agentDir: string, manifest: AgentManifest, options
   // from interfering with argument parsing of other flags
   args.push('--append-system-prompt', systemPrompt);
 
+  const runCwd = resolve(options.workspace ?? agentDir);
+
   info(`Launching Claude Code with agent "${manifest.name}"...`);
+  info(`Working directory: ${runCwd}`);
 
   // Resolve the real Claude Code binary, skipping any node_modules/.bin/claude
   // that may shadow it (e.g. when running via npx)
@@ -90,7 +94,7 @@ export function runWithClaude(agentDir: string, manifest: AgentManifest, options
   try {
     const result = spawnSync(claudePath, args, {
       stdio: 'inherit',
-      cwd: agentDir,
+      cwd: runCwd,
     });
 
     if (result.error) {

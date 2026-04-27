@@ -1,5 +1,5 @@
 import { writeFileSync, unlinkSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -7,18 +7,25 @@ import { exportToCrewAI } from '../adapters/crewai.js';
 import { AgentManifest } from '../utils/loader.js';
 import { error, info } from '../utils/format.js';
 
-export function runWithCrewAI(agentDir: string, _manifest: AgentManifest): void {
+export interface CrewAIRunOptions {
+  workspace?: string;
+}
+
+export function runWithCrewAI(agentDir: string, _manifest: AgentManifest, options: CrewAIRunOptions = {}): void {
   const config = exportToCrewAI(agentDir);
   const tmpFile = join(tmpdir(), `gitagent-${randomBytes(4).toString('hex')}.yaml`);
 
   writeFileSync(tmpFile, config, 'utf-8');
 
+  const runCwd = resolve(options.workspace ?? agentDir);
+
   info(`Running CrewAI agent from "${agentDir}"...`);
+  info(`Working directory: ${runCwd}`);
 
   try {
     const result = spawnSync('crewai', ['kickoff', '--config', tmpFile], {
       stdio: 'inherit',
-      cwd: agentDir,
+      cwd: runCwd,
       env: { ...process.env },
     });
 

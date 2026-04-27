@@ -13,6 +13,7 @@ const DEFAULT_MODEL = 'openai/gpt-4.1';
 export interface GitHubRunOptions {
   prompt?: string;
   token?: string;
+  workspace?: string;
 }
 
 /**

@@ -374,6 +374,9 @@ gapman export --format system-prompt
 
 # Run an agent directly
 gapman run ./my-agent --adapter lyzr
+
+# Run an agent definition against a separate target workspace
+gapman run --dir ./agents/reviewer --workspace ~/code/my-app --adapter claude -p "Review this repository"
 ```
 
 ## Inheritance & Composition

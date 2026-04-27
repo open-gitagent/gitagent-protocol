@@ -629,11 +629,14 @@ gitagent run [options]
 | `-d, --dir <dir>` | — | Local directory (alternative to `--repo`) |
 | `-a, --adapter <name>` | `claude` | Adapter (see table below) |
 | `-b, --branch <branch>` | `main` | Git branch or tag to clone |
+| `-w, --workspace <dir>` | Agent directory | Working directory for spawned agent process |
 | `--refresh` | `false` | Force re-clone (pull latest) |
 | `--no-cache` | `false` | Clone to temp dir, delete on exit |
 | `-p, --prompt <query>` | — | Initial prompt (non-interactive for some adapters) |
 
 Either `--repo` or `--dir` is required.
+
+`--workspace` lets an agent definition live separately from the repository it operates on. It is honored by adapters that can safely set the spawned process working directory directly, including `claude`, `openai`, `crewai`, `openclaw`, and `nanobot`. Adapters that generate an isolated runtime workspace, such as `opencode`, `gemini`, and `gitclaw`, continue to run from that prepared workspace to avoid overwriting files such as `AGENTS.md`, `GEMINI.md`, or `agent.yaml` in the target repository.
 
 **Available adapters:**
 
@@ -667,6 +670,9 @@ gitagent run -r https://github.com/user/agent -a git -p "Hello"
 
 # One-shot prompt mode
 gitagent run -d ./my-agent -p "Review my authentication code"
+
+# Run an agent definition against a separate target workspace
+gitagent run -d ./agents/reviewer --workspace ~/code/my-app -a claude -p "Review this repository"
 
 # Run a specific branch, force refresh
 gitagent run -r https://github.com/user/agent -b develop --refresh

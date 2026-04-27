@@ -9,6 +9,7 @@ import { error, info } from '../utils/format.js';
 
 export interface GeminiRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 /**
@@ -24,6 +25,10 @@ export interface GeminiRunOptions {
  * Supports both interactive mode (no prompt) and single-shot mode (`gemini -p`).
  */
 export function runWithGemini(agentDir: string, manifest: AgentManifest, options: GeminiRunOptions = {}): void {
+  if (options.workspace) {
+    info('--workspace is not applied to Gemini because it reads GEMINI.md and .gemini/settings.json from the prepared temporary workspace.');
+  }
+
   const exp = exportToGemini(agentDir);
 
   // Create a temporary workspace

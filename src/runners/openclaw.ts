@@ -1,5 +1,5 @@
 import { writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -10,6 +10,7 @@ import { ensureOpenClawAuth } from '../utils/auth-provision.js';
 
 export interface OpenClawRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 export function runWithOpenClaw(agentDir: string, manifest: AgentManifest, options: OpenClawRunOptions = {}): void {
@@ -58,6 +59,8 @@ export function runWithOpenClaw(agentDir: string, manifest: AgentManifest, optio
     info(`  Sub-agent workspace: workspace-${sub.name}/`);
   }
 
+  const runCwd = resolve(options.workspace ?? workspaceDir);
+
   // Write openclaw.json config, pointing workspaces to temp dirs
   const config = exp.config as Record<string, Record<string, unknown>>;
   if (hasSubAgents) {
@@ -72,7 +75,7 @@ export function runWithOpenClaw(agentDir: string, manifest: AgentManifest, optio
     }
   } else {
     config.agent = config.agent ?? {};
-    config.agent.workspace = workspaceDir;
+    config.agent.workspace = runCwd;
   }
 
   const configFile = join(workspaceDir, 'openclaw.json');
@@ -104,11 +107,12 @@ export function runWithOpenClaw(agentDir: string, manifest: AgentManifest, optio
   }
 
   info(`Launching OpenClaw agent "${manifest.name}"...`);
+  info(`Working directory: ${runCwd}`);
 
   try {
     const result = spawnSync('openclaw', args, {
       stdio: 'inherit',
-      cwd: workspaceDir,
+      cwd: runCwd,
       env: {
         ...process.env,
         OPENCLAW_CONFIG: configFile,

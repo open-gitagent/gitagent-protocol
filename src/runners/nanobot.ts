@@ -1,5 +1,5 @@
 import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir, homedir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -10,6 +10,7 @@ import { ensureNanobotAuth } from '../utils/auth-provision.js';
 
 export interface NanobotRunOptions {
   prompt?: string;
+  workspace?: string;
 }
 
 export function runWithNanobot(agentDir: string, manifest: AgentManifest, options: NanobotRunOptions = {}): void {
@@ -38,7 +39,10 @@ export function runWithNanobot(agentDir: string, manifest: AgentManifest, option
     args.push('--message', options.prompt);
   }
 
+  const runCwd = resolve(options.workspace ?? agentDir);
+
   info(`Launching Nanobot agent "${manifest.name}"...`);
+  info(`Working directory: ${runCwd}`);
   if (!options.prompt) {
     info('Starting interactive mode. Type your messages to chat.');
   }
@@ -46,7 +50,7 @@ export function runWithNanobot(agentDir: string, manifest: AgentManifest, option
   try {
     const result = spawnSync('nanobot', args, {
       stdio: 'inherit',
-      cwd: agentDir,
+      cwd: runCwd,
       env: {
         ...process.env,
         NANOBOT_CONFIG: configFile,

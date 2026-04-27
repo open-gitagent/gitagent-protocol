@@ -24,6 +24,7 @@ interface RunOptions {
   cache: boolean;
   prompt?: string;
   dir?: string;
+  workspace?: string;
 }
 
 export const runCommand = new Command('run')
@@ -35,6 +36,7 @@ export const runCommand = new Command('run')
   .option('--no-cache', 'Clone to temp dir, delete on exit')
   .option('-p, --prompt <query>', 'Initial prompt to send to the agent')
   .option('-d, --dir <dir>', 'Use local directory instead of git URL')
+  .option('-w, --workspace <dir>', 'Working directory for the spawned agent process')
   .action(async (options: RunOptions) => {
     let agentDir: string;
     let cleanup: (() => void) | undefined;
@@ -89,40 +91,43 @@ export const runCommand = new Command('run')
       label('Model', manifest.model.preferred);
     }
     label('Adapter', options.adapter);
+    if (options.workspace) {
+      label('Workspace', resolve(options.workspace));
+    }
     divider();
 
     // Run with selected adapter
     try {
       switch (options.adapter) {
         case 'claude':
-          runWithClaude(agentDir, manifest, { prompt: options.prompt });
+          runWithClaude(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'openai':
-          runWithOpenAI(agentDir, manifest);
+          runWithOpenAI(agentDir, manifest, { workspace: options.workspace });
           break;
         case 'crewai':
-          runWithCrewAI(agentDir, manifest);
+          runWithCrewAI(agentDir, manifest, { workspace: options.workspace });
           break;
         case 'openclaw':
-          runWithOpenClaw(agentDir, manifest, { prompt: options.prompt });
+          runWithOpenClaw(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'nanobot':
-          runWithNanobot(agentDir, manifest, { prompt: options.prompt });
+          runWithNanobot(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'lyzr':
-          await runWithLyzr(agentDir, manifest, { prompt: options.prompt });
+          await runWithLyzr(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'github':
-          await runWithGitHub(agentDir, manifest, { prompt: options.prompt });
+          await runWithGitHub(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'opencode':
-          runWithOpenCode(agentDir, manifest, { prompt: options.prompt });
+          runWithOpenCode(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'gemini':
-          runWithGemini(agentDir, manifest, { prompt: options.prompt });
+          runWithGemini(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'gitclaw':
-          runWithGitclaw(agentDir, manifest, { prompt: options.prompt });
+          runWithGitclaw(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
           break;
         case 'git':
           if (!options.repo) {
@@ -135,6 +140,7 @@ export const runCommand = new Command('run')
             refresh: options.refresh,
             noCache: !options.cache,
             prompt: options.prompt,
+            workspace: options.workspace,
           });
           break;
         case 'prompt':

@@ -21,6 +21,7 @@ export interface GitRunOptions {
   noCache?: boolean;
   adapter?: string;
   prompt?: string;
+  workspace?: string;
 }
 
 /**
@@ -85,33 +86,36 @@ export async function runWithGit(
     label('Model', manifest.model.preferred);
   }
   label('Adapter', adapter);
+  if (options.workspace) {
+    label('Workspace', resolve(options.workspace));
+  }
   divider();
 
   try {
     switch (adapter) {
       case 'claude':
-        runWithClaude(agentDir, manifest, { prompt: options.prompt });
+        runWithClaude(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'openai':
-        runWithOpenAI(agentDir, manifest);
+        runWithOpenAI(agentDir, manifest, { workspace: options.workspace });
         break;
       case 'crewai':
-        runWithCrewAI(agentDir, manifest);
+        runWithCrewAI(agentDir, manifest, { workspace: options.workspace });
         break;
       case 'openclaw':
-        runWithOpenClaw(agentDir, manifest, { prompt: options.prompt });
+        runWithOpenClaw(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'nanobot':
-        runWithNanobot(agentDir, manifest, { prompt: options.prompt });
+        runWithNanobot(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'opencode':
-        runWithOpenCode(agentDir, manifest, { prompt: options.prompt });
+        runWithOpenCode(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'lyzr':
-        await runWithLyzr(agentDir, manifest, { prompt: options.prompt });
+        await runWithLyzr(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'github':
-        await runWithGitHub(agentDir, manifest, { prompt: options.prompt });
+        await runWithGitHub(agentDir, manifest, { prompt: options.prompt, workspace: options.workspace });
         break;
       case 'prompt':
         console.log(exportToSystemPrompt(agentDir));
