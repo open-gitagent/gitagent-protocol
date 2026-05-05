@@ -4,22 +4,22 @@
 
 | Command | Description |
 |---------|-------------|
-| `gitagent init` | Scaffold a new agent repo (`-t minimal\|standard\|full`) |
-| `gitagent validate` | Validate agent.yaml and structure (`-c` for compliance) |
-| `gitagent info` | Show agent summary |
-| `gitagent export` | Export to other formats (`-f system-prompt\|claude-code\|openai\|crewai\|openclaw\|nanobot\|lyzr\|github`) |
-| `gitagent import` | Import from other frameworks (`--from claude\|cursor\|crewai`) |
-| `gitagent install` | Resolve git dependencies |
-| `gitagent audit` | Generate compliance audit report |
-| `gitagent skills search` | Search skill registries |
-| `gitagent skills install` | Install a skill |
-| `gitagent skills list` | List discovered skills |
-| `gitagent skills info` | Inspect a skill |
-| `gitagent run` | Run agent with an adapter (`-a claude\|openai\|crewai\|openclaw\|nanobot\|lyzr\|github\|git\|prompt`) |
-| `gitagent lyzr create` | Create agent on Lyzr Studio |
-| `gitagent lyzr update` | Push changes to Lyzr |
-| `gitagent lyzr info` | Show linked Lyzr agent ID |
-| `gitagent lyzr run` | Clone + create + chat on Lyzr in one command |
+| `gapman init` | Scaffold a new agent repo (`-t minimal\|standard\|full`) |
+| `gapman validate` | Validate agent.yaml and structure (`-c` for compliance) |
+| `gapman info` | Show agent summary |
+| `gapman export` | Export to other formats (`-f system-prompt\|claude-code\|openai\|crewai\|openclaw\|nanobot\|lyzr\|github`) |
+| `gapman import` | Import from other frameworks (`--from claude\|cursor\|crewai`) |
+| `gapman install` | Resolve git dependencies |
+| `gapman audit` | Generate compliance audit report |
+| `gapman skills search` | Search skill registries |
+| `gapman skills install` | Install a skill |
+| `gapman skills list` | List discovered skills |
+| `gapman skills info` | Inspect a skill |
+| `gapman run` | Run agent with an adapter (`-a claude\|openai\|crewai\|openclaw\|nanobot\|lyzr\|github\|git\|prompt`) |
+| `gapman lyzr create` | Create agent on Lyzr Studio |
+| `gapman lyzr update` | Push changes to Lyzr |
+| `gapman lyzr info` | Show linked Lyzr agent ID |
+| `gapman lyzr run` | Clone + create + chat on Lyzr in one command |
 
 ## Common Flags
 

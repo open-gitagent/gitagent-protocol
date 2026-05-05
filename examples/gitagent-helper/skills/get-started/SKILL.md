@@ -27,32 +27,32 @@ Walk the user through these steps:
 1. **Scaffold** — Pick a template:
    ```bash
    # Minimal (2 files)
-   gitagent init --template minimal --dir ./my-agent
+   gapman init --template minimal --dir ./my-agent
 
    # Standard (with skills, tools, knowledge)
-   gitagent init --template standard --dir ./my-agent
+   gapman init --template standard --dir ./my-agent
 
    # Full (compliance, hooks, memory, workflows)
-   gitagent init --template full --dir ./my-agent
+   gapman init --template full --dir ./my-agent
    ```
 
 2. **Edit** — Customize `agent.yaml` (name, description, model) and `SOUL.md` (identity, personality)
 
 3. **Validate** — Check your work:
    ```bash
-   gitagent validate -d ./my-agent
+   gapman validate -d ./my-agent
    ```
 
 4. **Run** — Launch with Claude:
    ```bash
-   gitagent run -d ./my-agent
+   gapman run -d ./my-agent
    ```
 
 5. **Share** — Push to git and anyone can run it:
    ```bash
    cd my-agent && git init && git add . && git commit -m "Initial agent"
    # Push to GitHub, then:
-   gitagent run -r https://github.com/you/my-agent
+   gapman run -r https://github.com/you/my-agent
    ```
 
 ### Minimum Required Files

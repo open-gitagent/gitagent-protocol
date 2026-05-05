@@ -18,49 +18,49 @@ When a user wants to find skills, install them, create new ones, or understand t
 After installing a skill, confirm it's available:
 
 ```bash
-gitagent skills list -d ./my-agent | grep "code-review"
+gapman skills list -d ./my-agent | grep "code-review"
 ```
 
 ## Search Skills
 
 ```bash
 # Search SkillsMP registry
-gitagent skills search "code review"
+gapman skills search "code review"
 
 # Search GitHub
-gitagent skills search "pdf reader" --provider github
+gapman skills search "pdf reader" --provider github
 
 # Limit results
-gitagent skills search "testing" --limit 5
+gapman skills search "testing" --limit 5
 ```
 
 ## Install Skills
 
 ```bash
 # Install from SkillsMP to agent-local skills/
-gitagent skills install code-review -d ./my-agent
+gapman skills install code-review -d ./my-agent
 
 # Install globally to ~/.agents/skills/
-gitagent skills install code-review --global
+gapman skills install code-review --global
 
 # Install from GitHub
-gitagent skills install owner/repo#skills/my-skill --provider github
+gapman skills install owner/repo#skills/my-skill --provider github
 ```
 
 ## List Skills
 
 ```bash
 # Show all discovered skills (local + global)
-gitagent skills list -d ./my-agent
+gapman skills list -d ./my-agent
 
 # Only agent-local skills
-gitagent skills list -d ./my-agent --local
+gapman skills list -d ./my-agent --local
 ```
 
 ## Inspect a Skill
 
 ```bash
-gitagent skills info code-review -d ./my-agent
+gapman skills info code-review -d ./my-agent
 ```
 
 Shows: name, description, license, allowed tools, metadata, optional directories.
@@ -96,7 +96,7 @@ skills:
 
 4. Validate:
 ```bash
-gitagent validate -d ./my-agent
+gapman validate -d ./my-agent
 ```
 
 ## Skill Discovery Paths

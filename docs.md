@@ -60,7 +60,7 @@ gapman --version   # 0.3.1
 gapman --help
 
 # gitagent alias also works
-gitagent --version
+gapman --version
 ```
 
 ---
@@ -69,28 +69,28 @@ gitagent --version
 
 ```bash
 # Create a new agent
-gitagent init --template standard --dir ./my-agent
+gapman init --template standard --dir ./my-agent
 
 # Validate it
-gitagent validate -d ./my-agent
+gapman validate -d ./my-agent
 
 # Run it locally with Claude Code
-gitagent run -d ./my-agent
+gapman run -d ./my-agent
 
 # Run from a git repo
-gitagent run -r https://github.com/user/my-agent -p "Hello"
+gapman run -r https://github.com/user/my-agent -p "Hello"
 
 # Run with a different adapter
-gitagent run -d ./my-agent -a github -p "Summarize this project"
+gapman run -d ./my-agent -a github -p "Summarize this project"
 
 # Clone + auto-detect best adapter + run
-gitagent run -r https://github.com/user/my-agent -a git -p "Hello"
+gapman run -r https://github.com/user/my-agent -a git -p "Hello"
 
 # Deploy to Lyzr Studio and chat
-gitagent lyzr run -r https://github.com/user/my-agent -p "Hello"
+gapman lyzr run -r https://github.com/user/my-agent -p "Hello"
 
 # Export to another framework
-gitagent export -f openai -d ./my-agent -o agent.py
+gapman export -f openai -d ./my-agent -o agent.py
 ```
 
 ---
@@ -336,7 +336,7 @@ metadata:
 Scaffold a new agent repository.
 
 ```bash
-gitagent init [options]
+gapman init [options]
 ```
 
 | Option | Default | Description |
@@ -353,8 +353,8 @@ gitagent init [options]
 | `full` | Everything in standard + `memory/`, `hooks/`, `examples/`, `agents/`, `compliance/`, `config/`, `.gitignore` |
 
 ```bash
-gitagent init --template minimal
-gitagent init --template full --dir ./my-agent
+gapman init --template minimal
+gapman init --template full --dir ./my-agent
 ```
 
 ---
@@ -364,7 +364,7 @@ gitagent init --template full --dir ./my-agent
 Validate an agent against the specification and optionally check regulatory compliance.
 
 ```bash
-gitagent validate [options]
+gapman validate [options]
 ```
 
 | Option | Default | Description |
@@ -392,9 +392,9 @@ gitagent validate [options]
 - Vendor management metadata for dependencies
 
 ```bash
-gitagent validate
-gitagent validate --compliance
-gitagent validate -d ./examples/full --compliance
+gapman validate
+gapman validate --compliance
+gapman validate -d ./examples/full --compliance
 ```
 
 ---
@@ -404,7 +404,7 @@ gitagent validate -d ./examples/full --compliance
 Display a formatted summary of the agent configuration.
 
 ```bash
-gitagent info [options]
+gapman info [options]
 ```
 
 | Option | Default | Description |
@@ -414,8 +414,8 @@ gitagent info [options]
 Shows: name, version, description, author, license, model preferences, skills, tools, sub-agents, runtime config, compliance settings, tags, and a SOUL.md preview.
 
 ```bash
-gitagent info
-gitagent info -d ./examples/standard
+gapman info
+gapman info -d ./examples/standard
 ```
 
 ---
@@ -425,7 +425,7 @@ gitagent info -d ./examples/standard
 Export an agent to another framework's format.
 
 ```bash
-gitagent export [options]
+gapman export [options]
 ```
 
 | Option | Default | Description |
@@ -449,22 +449,22 @@ gitagent export [options]
 
 ```bash
 # Print system prompt to terminal
-gitagent export --format system-prompt
+gapman export --format system-prompt
 
 # Save Claude Code format to file
-gitagent export --format claude-code --output CLAUDE.md
+gapman export --format claude-code --output CLAUDE.md
 
 # Generate OpenAI Python code
-gitagent export --format openai --output agent.py
+gapman export --format openai --output agent.py
 
 # Preview Lyzr API payload
-gitagent export --format lyzr -d ./examples/lyzr-agent
+gapman export --format lyzr -d ./examples/lyzr-agent
 
 # Preview GitHub Models payload
-gitagent export --format github -d ./examples/standard
+gapman export --format github -d ./examples/standard
 
 # Export CrewAI config
-gitagent export --format crewai -d ./examples/standard
+gapman export --format crewai -d ./examples/standard
 ```
 
 ---
@@ -474,7 +474,7 @@ gitagent export --format crewai -d ./examples/standard
 Import from another agent framework into gitagent format.
 
 ```bash
-gitagent import --from <format> <path> [options]
+gapman import --from <format> <path> [options]
 ```
 
 | Option | Default | Description |
@@ -492,9 +492,9 @@ gitagent import --from <format> <path> [options]
 | `crewai` | CrewAI YAML config | `agent.yaml`, `SOUL.md`, sub-agents in `agents/` |
 
 ```bash
-gitagent import --from claude ./my-claude-project
-gitagent import --from cursor ./.cursorrules
-gitagent import --from crewai ./crew.yaml --dir ./imported-agent
+gapman import --from claude ./my-claude-project
+gapman import --from cursor ./.cursorrules
+gapman import --from crewai ./crew.yaml --dir ./imported-agent
 ```
 
 ---
@@ -504,7 +504,7 @@ gitagent import --from crewai ./crew.yaml --dir ./imported-agent
 Resolve and install git-based agent dependencies declared in `agent.yaml`.
 
 ```bash
-gitagent install [options]
+gapman install [options]
 ```
 
 | Option | Default | Description |
@@ -518,8 +518,8 @@ For each entry in `dependencies`:
 - Validates that installed dependencies contain `agent.yaml`
 
 ```bash
-gitagent install
-gitagent install -d ./my-agent
+gapman install
+gapman install -d ./my-agent
 ```
 
 ---
@@ -529,7 +529,7 @@ gitagent install -d ./my-agent
 Generate a comprehensive compliance audit report.
 
 ```bash
-gitagent audit [options]
+gapman audit [options]
 ```
 
 | Option | Default | Description |
@@ -549,8 +549,8 @@ gitagent audit [options]
 9. **Audit Hooks** — hooks.yaml and compliance-flagged hooks
 
 ```bash
-gitagent audit
-gitagent audit -d ./examples/full
+gapman audit
+gapman audit -d ./examples/full
 ```
 
 ---
@@ -562,7 +562,7 @@ Manage agent skills — search registries, install, list, and inspect.
 #### skills search
 
 ```bash
-gitagent skills search <query> [options]
+gapman skills search <query> [options]
 ```
 
 | Option | Default | Description |
@@ -574,7 +574,7 @@ gitagent skills search <query> [options]
 #### skills install
 
 ```bash
-gitagent skills install <name> [options]
+gapman skills install <name> [options]
 ```
 
 | Option | Default | Description |
@@ -588,7 +588,7 @@ gitagent skills install <name> [options]
 #### skills list
 
 ```bash
-gitagent skills list [options]
+gapman skills list [options]
 ```
 
 | Option | Default | Description |
@@ -599,7 +599,7 @@ gitagent skills list [options]
 #### skills info
 
 ```bash
-gitagent skills info <name> [options]
+gapman skills info <name> [options]
 ```
 
 | Option | Default | Description |
@@ -607,10 +607,10 @@ gitagent skills info <name> [options]
 | `-d, --dir <dir>` | `.` | Agent directory |
 
 ```bash
-gitagent skills search "code review"
-gitagent skills install code-review --global
-gitagent skills list
-gitagent skills info code-review
+gapman skills search "code review"
+gapman skills install code-review --global
+gapman skills list
+gapman skills info code-review
 ```
 
 ---
@@ -620,7 +620,7 @@ gitagent skills info code-review
 Run an agent interactively with a specific adapter/framework.
 
 ```bash
-gitagent run [options]
+gapman run [options]
 ```
 
 | Option | Default | Description |
@@ -654,31 +654,31 @@ Either `--repo` or `--dir` is required.
 
 ```bash
 # Run a local agent with Claude Code (interactive)
-gitagent run -d ./my-agent
+gapman run -d ./my-agent
 
 # Run from a git repo
-gitagent run -r https://github.com/user/agent
+gapman run -r https://github.com/user/agent
 
 # Run with GitHub Models
-gitagent run -d ./my-agent -a github -p "Review my code"
+gapman run -d ./my-agent -a github -p "Review my code"
 
 # Run with Lyzr
-gitagent run -r https://github.com/user/agent -a lyzr -p "Hello"
+gapman run -r https://github.com/user/agent -a lyzr -p "Hello"
 
 # Auto-detect adapter from repo contents
-gitagent run -r https://github.com/user/agent -a git -p "Hello"
+gapman run -r https://github.com/user/agent -a git -p "Hello"
 
 # One-shot prompt mode
-gitagent run -d ./my-agent -p "Review my authentication code"
+gapman run -d ./my-agent -p "Review my authentication code"
 
 # Run an agent definition against a separate target workspace
-gitagent run -d ./agents/reviewer --workspace ~/code/my-app -a claude -p "Review this repository"
+gapman run -d ./agents/reviewer --workspace ~/code/my-app -a claude -p "Review this repository"
 
 # Run a specific branch, force refresh
-gitagent run -r https://github.com/user/agent -b develop --refresh
+gapman run -r https://github.com/user/agent -b develop --refresh
 
 # Just output the system prompt (no runner)
-gitagent run -d ./my-agent -a prompt
+gapman run -d ./my-agent -a prompt
 ```
 
 ---
@@ -688,7 +688,7 @@ gitagent run -d ./my-agent -a prompt
 Manage Lyzr Studio agents — create, update, inspect, and run.
 
 ```bash
-gitagent lyzr <subcommand> [options]
+gapman lyzr <subcommand> [options]
 ```
 
 #### lyzr create
@@ -696,7 +696,7 @@ gitagent lyzr <subcommand> [options]
 Create a new agent on Lyzr Studio from the local gitagent definition.
 
 ```bash
-gitagent lyzr create [options]
+gapman lyzr create [options]
 ```
 
 | Option | Default | Description |
@@ -707,7 +707,7 @@ gitagent lyzr create [options]
 Saves the returned agent ID to `.lyzr_agent_id` for reuse.
 
 ```bash
-gitagent lyzr create -d ./examples/lyzr-agent
+gapman lyzr create -d ./examples/lyzr-agent
 ```
 
 #### lyzr update
@@ -715,7 +715,7 @@ gitagent lyzr create -d ./examples/lyzr-agent
 Push the current gitagent definition to an existing Lyzr agent.
 
 ```bash
-gitagent lyzr update [options]
+gapman lyzr update [options]
 ```
 
 | Option | Default | Description |
@@ -725,8 +725,8 @@ gitagent lyzr update [options]
 | `--api-key <key>` | — | Lyzr API key (or set `LYZR_API_KEY`) |
 
 ```bash
-gitagent lyzr update -d ./examples/lyzr-agent
-gitagent lyzr update --agent-id abc123
+gapman lyzr update -d ./examples/lyzr-agent
+gapman lyzr update --agent-id abc123
 ```
 
 #### lyzr info
@@ -734,7 +734,7 @@ gitagent lyzr update --agent-id abc123
 Show the Lyzr agent ID linked to this gitagent directory.
 
 ```bash
-gitagent lyzr info [options]
+gapman lyzr info [options]
 ```
 
 | Option | Default | Description |
@@ -742,7 +742,7 @@ gitagent lyzr info [options]
 | `-d, --dir <dir>` | `.` | Agent directory |
 
 ```bash
-gitagent lyzr info -d ./examples/lyzr-agent
+gapman lyzr info -d ./examples/lyzr-agent
 ```
 
 #### lyzr run
@@ -750,7 +750,7 @@ gitagent lyzr info -d ./examples/lyzr-agent
 Clone a git agent repo, create it on Lyzr, and chat — all in one command.
 
 ```bash
-gitagent lyzr run [options]
+gapman lyzr run [options]
 ```
 
 | Option | Default | Description |
@@ -767,13 +767,13 @@ If no `.lyzr_agent_id` exists, the agent is created on Lyzr Studio first. If no 
 
 ```bash
 # Full one-liner: clone + create + chat
-gitagent lyzr run -r https://github.com/user/my-agent -p "Hello"
+gapman lyzr run -r https://github.com/user/my-agent -p "Hello"
 
 # From local directory
-gitagent lyzr run -d ./examples/lyzr-agent -p "Summarize AI trends"
+gapman lyzr run -d ./examples/lyzr-agent -p "Summarize AI trends"
 
 # Just create (no prompt)
-gitagent lyzr run -r https://github.com/user/my-agent
+gapman lyzr run -r https://github.com/user/my-agent
 ```
 
 **Lyzr API Endpoints:**
@@ -878,7 +878,7 @@ GitHub Models API payload (OpenAI-compatible chat completions). Returns JSON wit
 
 ## Adapters & Runners
 
-When you run `gitagent run -a <adapter>`, the corresponding runner prepares the environment and launches the framework.
+When you run `gapman run -a <adapter>`, the corresponding runner prepares the environment and launches the framework.
 
 ### Claude Runner
 
@@ -1005,7 +1005,7 @@ Adapter: `github`
 
 ```bash
 export GITHUB_TOKEN="ghp_..."
-gitagent run -d ./my-agent -a github -p "Review this code"
+gapman run -d ./my-agent -a github -p "Review this code"
 ```
 
 ---
@@ -1032,10 +1032,10 @@ The git runner clones a repository and auto-detects the best adapter from the ag
 
 ```bash
 # Auto-detect and run
-gitagent run -a git -r https://github.com/user/my-agent -p "Hello"
+gapman run -a git -r https://github.com/user/my-agent -p "Hello"
 
 # Force a specific branch
-gitagent run -a git -r https://github.com/user/my-agent -b develop --refresh -p "Hello"
+gapman run -a git -r https://github.com/user/my-agent -b develop --refresh -p "Hello"
 ```
 
 ---
@@ -1157,7 +1157,7 @@ compliance/
 
 ### Audit Report
 
-Run `gitagent audit` to generate a section-by-section compliance checklist with pass/fail/warning indicators for every regulatory requirement.
+Run `gapman audit` to generate a section-by-section compliance checklist with pass/fail/warning indicators for every regulatory requirement.
 
 ---
 
@@ -1186,7 +1186,7 @@ dependencies:
       risk_assessment: low
 ```
 
-Run `gitagent install` to resolve and clone all dependencies.
+Run `gapman install` to resolve and clone all dependencies.
 
 ### Sub-Agents
 
@@ -1347,8 +1347,8 @@ examples/lyzr-agent/
 ```
 
 ```bash
-gitagent lyzr create -d ./examples/lyzr-agent
-gitagent lyzr run -d ./examples/lyzr-agent -p "What are AI agents?"
+gapman lyzr create -d ./examples/lyzr-agent
+gapman lyzr run -d ./examples/lyzr-agent -p "What are AI agents?"
 ```
 
 ---
@@ -1378,16 +1378,16 @@ gitagent/
 ├── src/
 │   ├── index.ts                    # CLI entry point (Commander)
 │   ├── commands/
-│   │   ├── init.ts                 # gitagent init
-│   │   ├── validate.ts             # gitagent validate
-│   │   ├── info.ts                 # gitagent info
-│   │   ├── export.ts               # gitagent export
-│   │   ├── import.ts               # gitagent import
-│   │   ├── install.ts              # gitagent install
-│   │   ├── audit.ts                # gitagent audit
-│   │   ├── skills.ts               # gitagent skills
-│   │   ├── run.ts                  # gitagent run
-│   │   └── lyzr.ts                 # gitagent lyzr
+│   │   ├── init.ts                 # gapman init
+│   │   ├── validate.ts             # gapman validate
+│   │   ├── info.ts                 # gapman info
+│   │   ├── export.ts               # gapman export
+│   │   ├── import.ts               # gapman import
+│   │   ├── install.ts              # gapman install
+│   │   ├── audit.ts                # gapman audit
+│   │   ├── skills.ts               # gapman skills
+│   │   ├── run.ts                  # gapman run
+│   │   └── lyzr.ts                 # gapman lyzr
 │   ├── adapters/
 │   │   ├── index.ts                # Re-exports all adapters
 │   │   ├── system-prompt.ts        # Markdown system prompt

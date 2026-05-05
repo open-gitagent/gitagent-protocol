@@ -136,7 +136,7 @@ Fork any public agent repo, customize its `SOUL.md`, add your own skills, and PR
 <img src="patterns/agent-forking.png" alt="Agent Forking & Remixing" width="600" />
 
 ### CI/CD for Agents
-Run `gitagent validate` on every push via GitHub Actions. Test agent behavior in CI, block bad merges, and auto-deploy — treat agent quality like code quality.
+Run `gapman validate` on every push via GitHub Actions. Test agent behavior in CI, block bad merges, and auto-deploy — treat agent quality like code quality.
 
 <img src="patterns/ci-cd-agents.png" alt="CI/CD for Agents" width="600" />
 
@@ -216,7 +216,7 @@ This pattern is demonstrated with [NVIDIA's AIQ Deep Researcher](https://github.
 
 - **Fork for a new domain** — edit `SOUL.md` for legal/medical/finance research without touching Python
 - **Version prompts independently** — `git diff` when the orchestrator's style regresses
-- **Validate SOD** — `gitagent validate --compliance` ensures the orchestrator can't also be the researcher
+- **Validate SOD** — `gapman validate --compliance` ensures the orchestrator can't also be the researcher
 - **Export to other runtimes** — same identity on Claude Code, OpenAI, or as a raw system prompt
 
 ```
@@ -347,7 +347,7 @@ gitagent has first-class support for financial regulatory compliance:
 
 Inspired by [Salient AI](https://www.trysalient.com/)'s purpose-built agent architecture and the [FINOS AI Governance Framework](https://air-governance-framework.finos.org/mitigations/mi-22_multi-agent-isolation-and-segmentation.html).
 
-Run `gitagent audit` for a full compliance checklist against your agent configuration.
+Run `gapman audit` for a full compliance checklist against your agent configuration.
 
 ## Adapters
 

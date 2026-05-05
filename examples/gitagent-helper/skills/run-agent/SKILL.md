@@ -25,13 +25,13 @@ If you see authentication errors:
 
 ```bash
 # Run local agent with Claude (default)
-gitagent run -d ./my-agent
+gapman run -d ./my-agent
 
 # Run from git repo
-gitagent run -r https://github.com/user/agent
+gapman run -r https://github.com/user/agent
 
 # Run with a prompt (one-shot mode)
-gitagent run -d ./my-agent -p "Review my code"
+gapman run -d ./my-agent -p "Review my code"
 ```
 
 ## Adapters
@@ -52,24 +52,24 @@ gitagent run -d ./my-agent -p "Review my code"
 
 ```bash
 # Claude (interactive)
-gitagent run -d ./my-agent
+gapman run -d ./my-agent
 
 # GitHub Models (one-shot, streaming)
 export GITHUB_TOKEN="ghp_..."
-gitagent run -d ./my-agent -a github -p "Explain this codebase"
+gapman run -d ./my-agent -a github -p "Explain this codebase"
 
 # Lyzr (creates agent on Lyzr Studio + chats)
 export LYZR_API_KEY="..."
-gitagent run -r https://github.com/user/agent -a lyzr -p "Hello"
+gapman run -r https://github.com/user/agent -a lyzr -p "Hello"
 
 # Lyzr one-liner (clone + create + chat)
-gitagent lyzr run -r https://github.com/user/agent -p "Hello"
+gapman lyzr run -r https://github.com/user/agent -p "Hello"
 
 # Auto-detect adapter from repo
-gitagent run -r https://github.com/user/agent -a git -p "Hello"
+gapman run -r https://github.com/user/agent -a git -p "Hello"
 
 # Just print the system prompt
-gitagent run -d ./my-agent -a prompt
+gapman run -d ./my-agent -a prompt
 ```
 
 ## Git Caching
@@ -77,13 +77,13 @@ gitagent run -d ./my-agent -a prompt
 Repos cloned via `-r` are cached at `~/.gitagent/cache/`:
 ```bash
 # Use cache (default)
-gitagent run -r https://github.com/user/agent
+gapman run -r https://github.com/user/agent
 
 # Force refresh
-gitagent run -r https://github.com/user/agent --refresh
+gapman run -r https://github.com/user/agent --refresh
 
 # No cache (temp dir, deleted after)
-gitagent run -r https://github.com/user/agent --no-cache
+gapman run -r https://github.com/user/agent --no-cache
 ```
 
 ## Auto-Detection (`-a git`)

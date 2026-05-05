@@ -6,10 +6,10 @@ The official gitagent assistant — an AI agent that helps you build, run, and m
 
 ```bash
 # Run directly from GitHub
-gitagent run -r https://github.com/anthropics/gitagent-helper
+gapman run -r https://github.com/anthropics/gitagent-helper
 
 # Or with a prompt
-gitagent run -r https://github.com/anthropics/gitagent-helper -p "How do I create my first agent?"
+gapman run -r https://github.com/anthropics/gitagent-helper -p "How do I create my first agent?"
 ```
 
 ## What It Can Do
@@ -34,7 +34,7 @@ gitagent run -r https://github.com/anthropics/gitagent-helper -p "How do I creat
 
 ```bash
 git clone https://github.com/anthropics/gitagent-helper
-gitagent run -d ./gitagent-helper
+gapman run -d ./gitagent-helper
 ```
 
 ## Structure

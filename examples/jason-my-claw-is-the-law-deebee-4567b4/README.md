@@ -55,10 +55,10 @@ jason-my-claw-is-the-law-deebee-4567b4/
 
 ```bash
 # Install gitagent
-npm install -g @shreyaskapale/gitagent
+npm install -g @open-gitagent/gapman
 
 # Clone this agent
-gitagent clone open-gitagent/gitagent examples/jason-my-claw-is-the-law-deebee-4567b4 my-jason
+gapman clone open-gitagent/gitagent examples/jason-my-claw-is-the-law-deebee-4567b4 my-jason
 
 # Review the rules before running
 cat my-jason/RULES.md
