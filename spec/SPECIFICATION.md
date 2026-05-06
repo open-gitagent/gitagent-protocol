@@ -18,6 +18,7 @@ The standard is designed to be:
 my-agent/
 ├── agent.yaml              # [REQUIRED] Agent manifest
 ├── SOUL.md                 # [REQUIRED] Identity and personality
+├── identity.yaml           # [OPTIONAL] Cryptographic identity binding (Ed25519)
 ├── RULES.md                # Hard constraints and boundaries
 ├── DUTIES.md                 # Segregation of duties policy and role declaration
 ├── AGENTS.md               # Framework-agnostic fallback instructions
@@ -321,6 +322,68 @@ tags:
   - financial-services
   - regulated
 ```
+
+## 3a. identity.yaml — Cryptographic Identity (optional)
+
+When an agent needs verifiable identity — "is this agent really who it claims to be?" — add an `identity.yaml` file. This implements the [Works With Agents Identity Protocol](https://workswithagents.dev/specs/identity.md) (L2, CC BY 4.0), binding the manifest to an Ed25519 keypair for cryptographic verification.
+
+Fully optional. Agents without `identity.yaml` work identically to before. Production and regulated deployments get a seam to bolt on identity without changing the core gitagent surface.
+
+### Schema
+
+JSON Schema: [identity.schema.json](schemas/identity.schema.json)
+
+### Required Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `identity_version` | string | Identity protocol version (e.g., `"1.0.0-draft"`) |
+| `agent_id` | string | Unique agent identifier (lowercase, hyphens) — SHOULD match `agent.yaml` `name` |
+| `public_key` | string | Ed25519 public key in `ed25519:BASE64` format |
+
+### Optional Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key_fingerprint` | string | SHA-256 fingerprint (`sha256:HEX`) for compact verification |
+| `passport_uri` | string | URI to richer identity document (W3C DID, Agent Passport, custom) |
+| `did` | string | W3C Decentralized Identifier (`did:wwa:agent-name`) |
+| `created_at` | string | ISO 8601 creation timestamp |
+| `expires_at` | string | ISO 8601 expiry (null or omit = no expiry until rotated) |
+| `hardware_binding` | object | TPM/Secure Enclave/HSM attestation (`type`, `attestation`) |
+| `owner` | object | Human owner identity (`name`, `email`, `proof`) |
+
+### Example
+
+```yaml
+identity_version: "1.0.0-draft"
+agent_id: "loan-reviewer"
+public_key: "ed25519:iV6sDfN8kL2xQ7pR3tY9aBcE1gH4jM5oU8wZ0dF..."
+key_fingerprint: "sha256:a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0"
+created_at: "2026-05-06T14:30:00Z"
+passport_uri: "https://registry.example.com/agents/loan-reviewer/identity.json"
+did: "did:wwa:loan-reviewer"
+hardware_binding:
+  type: "tpm"
+  attestation: "base64encodedattestation..."
+owner:
+  name: "Financial Services Inc."
+  email: "compliance@example.com"
+  proof: "signed-challenge-response..."
+```
+
+### Runtime Semantics
+
+1. **Signing:** Agent signs outputs with its Ed25519 private key
+2. **Verification:** Downstream tools fetch `agent.yaml` + `identity.yaml`, verify signature against `public_key`
+3. **Delegation:** Repo owner signs sub-agent manifests creating a verifiable parent→child chain
+4. **Revocation:** Set `expires_at` or remove/revoke the public key in the registry. Pending tasks reassigned.
+
+### Reference Standard
+
+The schema and semantics are defined by the [Works With Agents Identity Protocol](https://workswithagents.dev/specs/identity.md) (v1.0.0-draft, CC BY 4.0). The gitagent `identity.yaml` is a compatible subset — all fields map 1:1 to the Identity Protocol schema.
+
+---
 
 ## 4. SOUL.md — Identity
 

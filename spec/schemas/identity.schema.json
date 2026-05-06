@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gitagent.dev/schemas/identity.schema.json",
+  "title": "gitagent Identity",
+  "description": "Schema for identity.yaml — cryptographic identity binding for gitagent manifests. Implements the Works With Agents Identity Protocol (L2, CC BY 4.0).",
+  "type": "object",
+  "required": ["identity_version", "agent_id", "public_key"],
+  "properties": {
+    "identity_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.]+)?$",
+      "description": "Identity protocol version this conforms to (e.g., '1.0.0-draft')",
+      "default": "1.0.0-draft"
+    },
+    "agent_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique agent identifier (lowercase, hyphens allowed)"
+    },
+    "public_key": {
+      "type": "string",
+      "pattern": "^ed25519:[A-Za-z0-9+/=]+$",
+      "description": "Ed25519 public key in prefixed base64 format"
+    },
+    "key_fingerprint": {
+      "type": "string",
+      "pattern": "^sha256:[A-Fa-f0-9]{64}$",
+      "description": "SHA-256 fingerprint of the public key for compact identity verification"
+    },
+    "passport_uri": {
+      "type": "string",
+      "format": "uri",
+      "description": "Optional URI pointing to a richer identity document (W3C DID, Agent Passport, or custom)"
+    },
+    "did": {
+      "type": "string",
+      "pattern": "^did:[a-z]+:[a-zA-Z0-9._%-]+$",
+      "description": "W3C Decentralized Identifier (e.g., did:wwa:agent-name)"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of identity creation"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 expiry timestamp. Omit or set to null for no expiry (until rotated)"
+    },
+    "hardware_binding": {
+      "type": "object",
+      "description": "Optional hardware key binding (TPM, Secure Enclave, etc.)",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["tpm", "secure_enclave", "hsm", "none"],
+          "description": "Hardware binding type"
+        },
+        "attestation": {
+          "type": "string",
+          "description": "Base64-encoded hardware attestation"
+        }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "description": "Optional human owner identity",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Owner name"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Owner email"
+        },
+        "proof": {
+          "type": "string",
+          "description": "Signed challenge-response proving ownership"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
