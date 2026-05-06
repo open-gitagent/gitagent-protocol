@@ -360,13 +360,17 @@ Adapters are used by both `export` and `run`. Available adapters:
 | `openai` | OpenAI Agents SDK Python code |
 | `crewai` | CrewAI YAML configuration |
 | `lyzr` | Lyzr Studio agent |
-| `github` | GitHub Actions agent |
+| `github` | GitHub Models inference |
 | `git` | Git-native execution (run only) |
 | `opencode` | OpenCode instructions + config |
 | `gemini` | Google Gemini CLI (GEMINI.md + settings.json) |
 | `openclaw` | OpenClaw format |
 | `nanobot` | Nanobot format |
 | `cursor` | Cursor `.cursor/rules/*.mdc` files |
+| `copilot` | GitHub Copilot instructions (export only) |
+| `codex` | OpenAI Codex CLI instructions (export only) |
+| `kiro` | Kiro agent format (export only) |
+| `gitclaw` | GitClaw agent format |
 
 ```bash
 # Export to system prompt
