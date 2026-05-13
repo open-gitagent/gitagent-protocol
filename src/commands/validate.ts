@@ -374,7 +374,7 @@ function validateCompliance(dir: string): ValidationResult {
   const fg = c.financial_governance;
   if (fg) {
     if (fg.enabled && fg.spending) {
-      if (fg.spending.max_per_transaction_cents <= 0) {
+      if (fg.spending.max_per_transaction_cents !== undefined && fg.spending.max_per_transaction_cents <= 0) {
         result.valid = false;
         result.errors.push(
           '[financial_governance] spending.max_per_transaction_cents must be a positive integer'
