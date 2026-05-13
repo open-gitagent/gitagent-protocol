@@ -141,6 +141,20 @@ export interface ComplianceConfig {
     }>;
     enforcement?: string;
   };
+  financial_governance?: {
+    enabled?: boolean;
+    spending?: {
+      max_per_transaction_cents?: number;
+      max_monthly_cents?: number;
+      allowed_categories?: string[];
+      blocked_categories?: string[];
+    };
+    approval?: {
+      require_above_cents?: number;
+      auto_deny_on_timeout?: boolean;
+    };
+    firewall?: string;
+  };
 }
 
 export function loadAgentManifest(dir: string): AgentManifest {
