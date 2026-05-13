@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
-import { buildComplianceSection } from './shared.js';
+import { buildComplianceSection, buildMcpServersConfig } from './shared.js';
 
 /**
  * Export a gitagent to OpenCode format.
@@ -184,6 +184,12 @@ function buildConfig(manifest: ReturnType<typeof loadAgentManifest>): Record<str
         npm: getNpmPackage(provider),
       },
     };
+  }
+
+  // MCP servers
+  const mcpServers = buildMcpServersConfig(manifest.mcp_servers);
+  if (mcpServers) {
+    config.mcpServers = mcpServers;
   }
 
   return config;

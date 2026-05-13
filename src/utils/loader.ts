@@ -62,6 +62,13 @@ export interface AgentManifest {
     protocols?: string[];
   };
   compliance?: ComplianceConfig;
+  mcp_servers?: Record<string, {
+    command?: string;
+    args?: string[];
+    env?: Record<string, string>;
+    url?: string;
+    headers?: Record<string, string>;
+  }>;
   tags?: string[];
   metadata?: Record<string, unknown>;
 }

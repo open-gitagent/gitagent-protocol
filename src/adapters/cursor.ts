@@ -3,6 +3,7 @@ import { join, resolve, basename } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
+import { buildMcpServersConfig } from './shared.js';
 
 /**
  * Export a gitagent to Cursor rules format.
@@ -28,6 +29,8 @@ export interface CursorRule {
 
 export interface CursorExport {
   rules: CursorRule[];
+  /** Content for .cursor/mcp.json (null if no MCP servers defined) */
+  mcpConfig: Record<string, unknown> | null;
 }
 
 export function exportToCursor(dir: string): CursorExport {
@@ -49,7 +52,11 @@ export function exportToCursor(dir: string): CursorExport {
     rules.push(buildSkillRule(skill));
   }
 
-  return { rules };
+  // MCP servers
+  const mcpServers = buildMcpServersConfig(manifest.mcp_servers);
+  const mcpConfig = mcpServers ? { mcpServers } : null;
+
+  return { rules, mcpConfig };
 }
 
 /**
@@ -63,6 +70,12 @@ export function exportToCursorString(dir: string): string {
   for (const rule of exp.rules) {
     parts.push(`# === .cursor/rules/${rule.filename} ===`);
     parts.push(rule.content);
+    parts.push('');
+  }
+
+  if (exp.mcpConfig) {
+    parts.push('# === .cursor/mcp.json ===');
+    parts.push(JSON.stringify(exp.mcpConfig, null, 2));
     parts.push('');
   }
 

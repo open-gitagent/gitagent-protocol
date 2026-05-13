@@ -1,6 +1,7 @@
 import { resolve, join } from 'node:path';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
+import { buildMcpServersMarkdown } from './shared.js';
 
 export interface LyzrAgentPayload {
   name: string;
@@ -65,6 +66,10 @@ function buildAgentInstructions(agentDir: string): string {
     const toolsNote = tools.length > 0 ? `\nAllowed tools: ${tools.join(', ')}` : '';
     parts.push(`## Skill: ${skill.frontmatter.name}\n${skill.frontmatter.description}${toolsNote}\n\n${skill.instructions}`);
   }
+
+  // MCP servers
+  const mcpSection = buildMcpServersMarkdown(manifest.mcp_servers);
+  if (mcpSection) parts.push(mcpSection);
 
   // Compliance constraints
   if (manifest.compliance) {

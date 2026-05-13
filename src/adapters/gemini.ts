@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
-import { buildComplianceSection } from './shared.js';
+import { buildComplianceSection, buildMcpServersConfig } from './shared.js';
 
 /**
  * Export a gitagent to Google Gemini CLI format.
@@ -244,8 +244,9 @@ function buildSettings(
     settings.hooks = hooksConfig;
   }
 
-  // MCP servers (placeholder - requires manual configuration)
-  settings.mcpServers = {};
+  // MCP servers
+  const mcpServers = buildMcpServersConfig(manifest.mcp_servers);
+  settings.mcpServers = mcpServers ?? {};
 
   return settings;
 }

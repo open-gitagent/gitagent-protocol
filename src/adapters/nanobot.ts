@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
+import { buildMcpServersMarkdown } from './shared.js';
 
 /**
  * Export a gitagent to Nanobot format.
@@ -150,6 +151,12 @@ function buildSystemPrompt(agentDir: string, manifest: ReturnType<typeof loadAge
       }
       parts.push(toolParts.join('\n'));
     }
+  }
+
+  // MCP servers
+  const mcpSection = buildMcpServersMarkdown(manifest.mcp_servers);
+  if (mcpSection) {
+    parts.push(mcpSection);
   }
 
   // Compliance constraints

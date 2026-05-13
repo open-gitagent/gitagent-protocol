@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import yaml from 'js-yaml';
 import { loadAgentManifest, loadFileIfExists } from '../utils/loader.js';
 import { loadAllSkills, getAllowedTools } from '../utils/skill-loader.js';
+import { buildMcpServersMarkdown } from './shared.js';
 
 export function exportToSystemPrompt(dir: string): string {
   const agentDir = resolve(dir);
@@ -57,6 +58,12 @@ export function exportToSystemPrompt(dir: string): string {
         }
       }
     }
+  }
+
+  // MCP servers
+  const mcpSection = buildMcpServersMarkdown(manifest.mcp_servers);
+  if (mcpSection) {
+    parts.push(mcpSection);
   }
 
   // Compliance constraints as system instructions

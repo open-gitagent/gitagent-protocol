@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { error, heading, info, success } from '../utils/format.js';
 import {
   exportToSystemPrompt,
-  exportToClaudeCode,
+  exportToClaudeCodeString,
   exportToOpenAI,
   exportToCrewAI,
   exportToOpenClawString,
@@ -44,7 +44,7 @@ export const exportCommand = new Command('export')
           result = exportToSystemPrompt(dir);
           break;
         case 'claude-code':
-          result = exportToClaudeCode(dir);
+          result = exportToClaudeCodeString(dir);
           break;
         case 'openai':
           result = exportToOpenAI(dir);
