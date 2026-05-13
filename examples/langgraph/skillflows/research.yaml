@@ -1,0 +1,8 @@
+name: research
+description: Run web-research, then summarize the result
+steps:
+  - id: research
+    skill: web-research
+  - id: summarize
+    skill: summarize
+    depends_on: [research]
