@@ -1,0 +1,15 @@
+spec_version: "0.1.0"
+name: research-assistant
+version: 1.0.0
+description: Two-step research assistant — searches the web, then summarizes findings
+author: gitagent-examples
+license: MIT
+model:
+  preferred: claude-sonnet-4-5
+runtime:
+  max_turns: 25
+skills:
+  - web-research
+  - summarize
+tools:
+  - web-search
